@@ -1,50 +1,45 @@
 import {
   SiReact,
   SiJavascript,
-  SiTypescript,
-  SiNodedotjs,
   SiPython,
   SiTailwindcss,
-  SiNextdotjs,
   SiMongodb,
-  SiPostgresql,
-  SiGit,
   SiDocker,
   SiFigma,
   SiHtml5,
   SiCss3,
-  SiFirebase,
-  SiVite,
+  SiFastapi,
+  SiPhp,
+  SiLaravel,
+  SiGithub,
 } from "react-icons/si";
 
 const categories = [
   {
+    title: "Backend & Database",
+    skills: [
+      { name: "FastAPI", icon: <SiFastapi />, color: "text-teal-500" },
+      { name: "Python", icon: <SiPython />, color: "text-blue-400" },
+      { name: "Laravel", icon: <SiLaravel />, color: "text-red-500" },
+      { name: "PHP", icon: <SiPhp />, color: "text-indigo-400" },
+      { name: "MongoDB", icon: <SiMongodb />, color: "text-green-600" },
+    ]
+
+  },
+    {
     title: "Frontend",
     skills: [
       { name: "React", icon: <SiReact />, color: "text-cyan-500" },
-      { name: "Next.js", icon: <SiNextdotjs />, color: "text-gray-800 dark:text-white" },
       { name: "JavaScript", icon: <SiJavascript />, color: "text-yellow-500" },
-      { name: "TypeScript", icon: <SiTypescript />, color: "text-blue-500" },
       { name: "Tailwind CSS", icon: <SiTailwindcss />, color: "text-teal-500" },
       { name: "HTML5", icon: <SiHtml5 />, color: "text-orange-500" },
       { name: "CSS3", icon: <SiCss3 />, color: "text-blue-600" },
-      { name: "Vite", icon: <SiVite />, color: "text-purple-500" },
-    ],
-  },
-  {
-    title: "Backend & Database",
-    skills: [
-      { name: "Node.js", icon: <SiNodedotjs />, color: "text-green-500" },
-      { name: "Python", icon: <SiPython />, color: "text-blue-400" },
-      { name: "MongoDB", icon: <SiMongodb />, color: "text-green-600" },
-      { name: "PostgreSQL", icon: <SiPostgresql />, color: "text-blue-700" },
-      { name: "Firebase", icon: <SiFirebase />, color: "text-yellow-500" },
     ],
   },
   {
     title: "Tools & Others",
     skills: [
-      { name: "Git", icon: <SiGit />, color: "text-orange-600" },
+      { name: "GitHub", icon: <SiGithub />, color: "text-gray-800 dark:text-white" },
       { name: "Docker", icon: <SiDocker />, color: "text-blue-500" },
       { name: "Figma", icon: <SiFigma />, color: "text-pink-500" },
     ],
@@ -59,7 +54,7 @@ export default function Skills() {
           My <span className="gradient-text">Skills</span>
         </h2>
         <p className="section-subheading">
-          Technologies and tools I work with to bring ideas to life.
+          Primarily focused on backend technologies, with working knowledge of frontend tools.
         </p>
 
         <div className="space-y-12">
