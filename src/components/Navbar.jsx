@@ -1,46 +1,48 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { AnimatePresence, motion } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { BsSun, BsMoon } from "react-icons/bs";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Navbar({ darkMode, setDarkMode }) {
+export default function Navbar({ darkMode, toggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/80 dark:bg-gray-950/80 backdrop-blur-lg shadow-sm"
+          ? "bg-white/80 shadow-sm backdrop-blur dark:bg-neutral-950/75"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#home" className="text-xl font-bold gradient-text">
-          &lt;Hafeez /&gt;
+      <nav
+        className="content-wrap flex h-16 items-center justify-between"
+        aria-label="Primary"
+      >
+        <a href="#home" className="text-sm font-semibold tracking-[0.2em] text-neutral-900 dark:text-white">
+          HAFEEZ
         </a>
 
-        {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"
+                className="text-sm text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
               >
                 {link.label}
               </a>
@@ -48,57 +50,58 @@ export default function Navbar({ darkMode, setDarkMode }) {
           ))}
         </ul>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4">
-          {/* Theme toggle */}
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle dark mode"
+            onClick={toggleTheme}
+            className="rounded-full p-2.5 text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+            aria-label="Toggle color theme"
           >
-            {darkMode ? (
-              <BsSun className="w-5 h-5 text-yellow-400" />
-            ) : (
-              <BsMoon className="w-5 h-5 text-gray-600" />
-            )}
+            {darkMode ? <BsSun className="h-4 w-4" /> : <BsMoon className="h-4 w-4" />}
           </button>
 
-          {/* Mobile menu button */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle menu"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="rounded-full p-2.5 text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800 md:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-label="Toggle navigation menu"
           >
-            {menuOpen ? (
-              <HiX className="w-6 h-6" />
-            ) : (
-              <HiMenuAlt3 className="w-6 h-6" />
-            )}
+            {menuOpen ? <HiX className="h-5 w-5" /> : <HiMenuAlt3 className="h-5 w-5" />}
           </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-80" : "max-h-0"
-        }`}
-      >
-        <ul className="px-6 pb-6 space-y-4 bg-white/90 dark:bg-gray-950/90 backdrop-blur-lg">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="block text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-500 transition-colors"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            id="mobile-navigation"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2 }}
+            className="border-t border-neutral-200 bg-white/95 px-6 py-5 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/95 md:hidden"
+          >
+            <ul className="space-y-4" role="list">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block text-sm text-neutral-700 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
 
+Navbar.propTypes = {
+  darkMode: PropTypes.bool.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+};

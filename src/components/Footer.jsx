@@ -1,32 +1,28 @@
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
-import { HiHeart } from "react-icons/hi";
+import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 
 const socials = [
-  { icon: <FaGithub />, href: "https://github.com", label: "GitHub" },
-  { icon: <FaLinkedin />, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: <FaTwitter />, href: "https://twitter.com", label: "Twitter" },
+  { icon: <FaGithub />, href: "https://github.com/hafeez-developer", label: "GitHub" },
+  { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/muhammad-hafeez-966252241/", label: "LinkedIn" },
+  { icon: <FaXTwitter />, href: "https://x.com/Hafeez793902", label: "X" },
 ];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800">
-      <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-          Built with <HiHeart className="text-red-500" /> by Hafeez &copy;{" "}
-          {new Date().getFullYear()}
-        </p>
+    <footer className="border-t border-neutral-200 py-8 dark:border-neutral-800">
+      <div className="content-wrap flex flex-col items-start justify-between gap-4 text-sm text-neutral-500 dark:text-neutral-400 md:flex-row md:items-center">
+        <p>Hafeez - {new Date().getFullYear()}</p>
 
-        <div className="flex items-center gap-4">
-          {socials.map((s) => (
+        <div className="flex items-center gap-4 text-base">
+          {socials.map((item) => (
             <a
-              key={s.label}
-              href={s.href}
+              key={item.label}
+              href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={s.label}
-              className="text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors text-xl"
+              aria-label={item.label}
+              className="transition-colors hover:text-neutral-900 dark:hover:text-white"
             >
-              {s.icon}
+              {item.icon}
             </a>
           ))}
         </div>
@@ -34,4 +30,3 @@ export default function Footer() {
     </footer>
   );
 }
-
