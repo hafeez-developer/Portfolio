@@ -5,10 +5,18 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        sans: [
+          "SF Pro Display",
+          "SF Pro Text",
+          "Inter",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          '"Segoe UI"',
+          "sans-serif",
+        ],
       },
     },
   },
   plugins: [],
-}
-
+};
