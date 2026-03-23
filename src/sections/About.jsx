@@ -1,90 +1,62 @@
-import { HiCode, HiSparkles, HiLightningBolt } from "react-icons/hi";
+import { motion, useReducedMotion } from "framer-motion";
+import { fadeUp, staggerContainer } from "../motion/variants";
 
-const highlights = [
-  {
-    icon: <HiCode className="w-6 h-6 text-indigo-500" />,
-    title: "Clean Code",
-    text: "Writing maintainable, well-documented code with best practices.",
-  },
-  {
-    icon: <HiSparkles className="w-6 h-6 text-purple-500" />,
-    title: "Modern Design",
-    text: "Creating intuitive, accessible interfaces with attention to detail.",
-  },
-  {
-    icon: <HiLightningBolt className="w-6 h-6 text-pink-500" />,
-    title: "Performance",
-    text: "Building fast, optimised applications that scale effectively.",
-  },
+const skills = [
+  "FastAPI",
+  "Laravel",
+  "Python",
+  "PHP",
+  "Docker",
+  "MongoDB",
+  "Github"
 ];
 
 export default function About() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id="about" className="py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="section-heading">
-          About <span className="gradient-text">Me</span>
-        </h2>
-        <p className="section-subheading">
-          Get to know who I am and what drives me as a developer.
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Photo / illustration placeholder */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-64 h-64 md:w-80 md:h-80 rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-1">
-                <div className="w-full h-full rounded-3xl bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-6xl">
-                  👨‍💻
-                </div>
-              </div>
-              {/* Decorative dots */}
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-indigo-500/10 rounded-2xl -z-10" />
-              <div className="absolute -top-4 -left-4 w-16 h-16 bg-purple-500/10 rounded-2xl -z-10" />
-            </div>
-          </div>
-
-          {/* Text */}
+    <section id="about" className="section-shell border-t border-neutral-200/70 dark:border-neutral-800/70">
+      <div className="content-wrap">
+        <motion.div
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? {} : "visible"}
+          viewport={{ once: true, amount: 0.25 }}
+          variants={reduceMotion ? {} : staggerContainer}
+          className="grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-start"
+        >
           <div>
-            <h3 className="text-2xl font-bold mb-4">
-              Full-Stack Developer based in <span className="gradient-text">your city</span>
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-              I&apos;m a passionate developer with experience in building web applications
-              using modern technologies. I love turning complex problems into simple,
-              beautiful, and intuitive solutions. When I&apos;m not coding, you&apos;ll find me
-              exploring new technologies, contributing to open source, or enjoying a good cup
-              of coffee.
-            </p>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
-              I believe in continuous learning and staying up-to-date with the latest trends
-              in web development. My goal is to create impactful digital experiences that
-              make a difference.
-            </p>
-
-            {/* Highlight cards */}
-            <div className="space-y-4">
-              {highlights.map((item) => (
-                <div
-                  key={item.title}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800"
-                >
-                  <div className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">{item.title}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {item.text}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <motion.p variants={reduceMotion ? {} : fadeUp} className="section-kicker">
+              About
+            </motion.p>
+            <motion.h2 variants={reduceMotion ? {} : fadeUp} className="section-title">
+              I build dependable systems with a calm, detail-first process.
+            </motion.h2>
+            <motion.p
+              variants={reduceMotion ? {} : fadeUp}
+              className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-600 dark:text-neutral-300"
+            >
+              I focus on APIs and server-side applications that are clear to maintain and ready to scale. I value
+              readable code, thoughtful architecture, and close collaboration across product and design.
+            </motion.p>
           </div>
-        </div>
+
+          <motion.div variants={reduceMotion ? {} : fadeUp} className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800">
+            <h3 className="text-sm font-medium uppercase tracking-[0.18em] text-neutral-500 dark:text-neutral-400">
+              Key Skills
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-2" role="list">
+              {skills.map((skill) => (
+                <li
+                  key={skill}
+                  className="rounded-full border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 dark:border-neutral-700 dark:text-neutral-300"
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
 }
-
