@@ -2,16 +2,70 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUp, staggerContainer } from "../motion/variants";
 
+const initialForm = { name: "", email: "", subject: "", message: "" };
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function Contact() {
   const reduceMotion = useReducedMotion();
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState({ type: "", message: "" });
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = (event) => {
+  const validate = () => {
+    const nextErrors = {};
+
+    if (!form.name.trim()) nextErrors.name = "Name is required.";
+    if (!form.email.trim()) nextErrors.email = "Email is required.";
+    if (form.email.trim() && !emailPattern.test(form.email.trim())) {
+      nextErrors.email = "Please enter a valid email address.";
+    }
+    if (!form.subject.trim()) nextErrors.subject = "Subject is required.";
+    if (!form.message.trim()) nextErrors.message = "Message is required.";
+
+    return nextErrors;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitted(true);
-    setForm({ name: "", email: "", message: "" });
-    window.setTimeout(() => setSubmitted(false), 3200);
+
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    setStatus({ type: "", message: "" });
+
+    if (Object.keys(validationErrors).length > 0) return;
+
+    setIsSending(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          subject: form.subject.trim(),
+          message: form.message.trim(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error || "Failed to send message.");
+      }
+
+      setForm(initialForm);
+      setStatus({ type: "success", message: "Thanks! Your message has been sent successfully." });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error.message || "Unable to send message right now. Please try again later.",
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -52,9 +106,13 @@ export default function Contact() {
                 name="name"
                 required
                 value={form.name}
-                onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
+                onChange={(event) => {
+                  setForm((prev) => ({ ...prev, name: event.target.value }));
+                  setErrors((prev) => ({ ...prev, name: "" }));
+                }}
                 className="input-field"
               />
+              {errors.name && <p className="text-sm text-red-600 dark:text-red-400">{errors.name}</p>}
 
               <label className="block text-sm" htmlFor="email">
                 Email
@@ -65,9 +123,29 @@ export default function Contact() {
                 type="email"
                 required
                 value={form.email}
-                onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+                onChange={(event) => {
+                  setForm((prev) => ({ ...prev, email: event.target.value }));
+                  setErrors((prev) => ({ ...prev, email: "" }));
+                }}
                 className="input-field"
               />
+              {errors.email && <p className="text-sm text-red-600 dark:text-red-400">{errors.email}</p>}
+
+              <label className="block text-sm" htmlFor="subject">
+                Subject
+              </label>
+              <input
+                id="subject"
+                name="subject"
+                required
+                value={form.subject}
+                onChange={(event) => {
+                  setForm((prev) => ({ ...prev, subject: event.target.value }));
+                  setErrors((prev) => ({ ...prev, subject: "" }));
+                }}
+                className="input-field"
+              />
+              {errors.subject && <p className="text-sm text-red-600 dark:text-red-400">{errors.subject}</p>}
 
               <label className="block text-sm" htmlFor="message">
                 Message
@@ -78,18 +156,29 @@ export default function Contact() {
                 rows={4}
                 required
                 value={form.message}
-                onChange={(event) => setForm((prev) => ({ ...prev, message: event.target.value }))}
+                onChange={(event) => {
+                  setForm((prev) => ({ ...prev, message: event.target.value }));
+                  setErrors((prev) => ({ ...prev, message: "" }));
+                }}
                 className="input-field resize-none"
               />
+              {errors.message && <p className="text-sm text-red-600 dark:text-red-400">{errors.message}</p>}
             </div>
 
-            <button type="submit" className="btn-primary mt-6">
-              Send Message
+            <button type="submit" className="btn-primary mt-6" disabled={isSending}>
+              {isSending ? "Sending..." : "Send Message"}
             </button>
 
-            {submitted && (
-              <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400" role="status">
-                Thanks. Your message has been recorded locally for now.
+            {status.message && (
+              <p
+                className={`mt-4 text-sm ${
+                  status.type === "error"
+                    ? "text-red-600 dark:text-red-400"
+                    : "text-green-600 dark:text-green-400"
+                }`}
+                role="status"
+              >
+                {status.message}
               </p>
             )}
           </motion.form>

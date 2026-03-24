@@ -42,12 +42,19 @@ Portfolio/
 
 ```bash
 npm install
+cp .env.example .env
 ```
 
 ## Run
 
 ```bash
 npm run dev
+```
+
+Run frontend + backend together:
+
+```bash
+npm run dev:full
 ```
 
 ## Build
@@ -74,8 +81,26 @@ docker build -t portfolio-app .
 Run container on `http://localhost:8080`:
 
 ```bash
-docker run --rm -p 8080:80 portfolio-app
+docker run --rm -p 8080:3001 --env-file .env portfolio-app
 ```
+
+## SMTP Environment Variables
+
+Set these in `.env`:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM_EMAIL`
+- `ENABLE_AUTO_REPLY` (set `false` if your SMTP sandbox blocks sending to visitor emails)
+- `CONTACT_RECEIVER_EMAIL`
+
+The backend endpoint is `POST /api/contact` and includes:
+
+- rate limiting (5 requests per 15 minutes per IP)
+- server-side input validation and sanitization
+- owner notification email + user auto-reply
 
 ## Design Notes
 
