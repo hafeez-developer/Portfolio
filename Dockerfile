@@ -10,11 +10,19 @@ COPY . .
 RUN npm run build
 
 # ---- Runtime stage ----
-FROM nginx:1.27-alpine AS runner
+FROM node:20-alpine AS runner
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-EXPOSE 80
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-CMD ["nginx", "-g", "daemon off;"]
+COPY server ./server
+COPY --from=builder /app/dist ./dist
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+EXPOSE 3001
+
+CMD ["npm", "run", "start"]
