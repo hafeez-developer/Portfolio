@@ -34,7 +34,7 @@ export default function Navbar({ darkMode, toggleTheme }) {
         aria-label="Primary"
       >
         <a href="#home" className="text-sm font-semibold tracking-[0.2em] text-neutral-900 dark:text-white">
-          HAFEEZ
+          M. HAFEEZ
         </a>
 
         <ul className="hidden items-center gap-8 md:flex">
